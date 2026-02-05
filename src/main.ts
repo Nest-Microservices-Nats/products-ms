@@ -9,18 +9,21 @@ async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
-      transport: Transport.TCP,
+      transport: Transport.NATS,
       options: {
-        port: envs.port
+        servers: envs.nastServers
       }
     }
   );
+  
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true
     })
   );
+
+  app.listen();
   logger.log(`Products Microservices running on port: ${envs.port}`)
 }
 bootstrap();
